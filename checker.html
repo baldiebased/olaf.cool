@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 300px;
+    }
+    .result {
+      margin-top: 15px;
+    }
+    .ok { color: rgb(255, 0, 0); }
+    .fail { color: rgb(0, 255, 34); }
+    a.lewy-gorny-link {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+      background: #eee;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html" class="lewy-gorny-link">back</a>
+
+<h2>reddit & github name checker</h2>
+
+<input type="text" id="username" placeholder="e.g. olaf" />
+<button onclick="checkAll()">check</button>
+
+<div id="results" class="result"></div>
+
+<script>
+  function checkImage(url, callback) {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url + "?rand=" + Math.random();
+  }
+
+  function checkPageExists(url, callback) {
+    const img = new Image();
+    img.onload = () => callback(true);
+    img.onerror = () => callback(false);
+    img.src = url + "/favicon.ico?" + Math.random();
+  }
+
+  async function checkReddit(username) {
+    try {
+      const res = await fetch(`https://www.reddit.com/user/${username}/about.json`);
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  function checkAll() {
+    const username = document.getElementById("username").value.trim();
+    const resultsDiv = document.getElementById("results");
+    if (!username) {
+      resultsDiv.innerHTML = "⚠️ enter your username";
+      return;
+    }
+
+    resultsDiv.innerHTML = "⏳ checking...";
+
+    Promise.all([
+      checkReddit(username),
+      new Promise(res => checkImage(`https://github.com/${username}.png`, res)),
+      new Promise(res => checkImage(`https://static-cdn.jtvnw.net/previews-ttv/live_user_${username}-80x45.jpg`, res)),
+    ]).then(([reddit, github]) => {
+      resultsDiv.innerHTML = `
+        <p>Reddit: <span class="${reddit ? 'ok' : 'fail'}">${reddit ? '❌ taken' : '✅ available'}</span></p>
+        <p>GitHub: <span class="${github ? 'ok' : 'fail'}">${github ? '❌ taken' : '✅ available'}</span></p>
+      `;
+    });
+  }
+</script>
+
+</body>
+</html>

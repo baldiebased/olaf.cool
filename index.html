@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>olaf.cool</title>
+<link rel="shortcut icon" href="3.ico" type="image/x-icon">
+<link rel="icon" href="3.ico" type="image/x-icon">
+<style>
+body {top: 0; left: 0; width: 99%; height: 97%;
+    position: absolute; display: table}
+  p {display: table-cell; vertical-align: middle; text-align: center}
+#timezone * {text-decoration: none;}
+
+
+</style>
+
+<script type="text/javascript">
+    let options = {
+        timeZone: 'Europe/Zagreb',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+
+    // set time
+    setInterval(
+        () => {
+            document.querySelector("#time").innerText = formatter.format(new Date());
+        }
+    , 1000)
+</script>
+
+
+
+<body><p>
+<font size="7"><i><b>olaf.cool</b></i></font> <br>
+<br>
+<img src="1.png" style="width:560px;"><br>
+<br>
+<span id="timezone">
+<i>
+<a href="https://24timezones.com/current_time/poland_lublin_clock.php">time in lublin, poland</a> - <span id="time"></span> <a href="https://24timezones.com/time-zone/cest">CEST</a>
+</i>
+</span>
+<br><br>
+
+<a href="about.html">about</a> //
+<a href="gear.html">gear</a> //
+<a href="checker.html">checker</a> //
+<a href="shark.html">shark's gallery</a> //
+<a href="contact.html">contact</a>
+
+<br>
+<br>
+
+
+</p></body></html>
